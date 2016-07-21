@@ -1,31 +1,35 @@
-<div class="padd-15" ng-controller="HomeController">
+<div class="padd-15 container" ng-controller="HomeController">
   <h1>{{title}}</h1>
-  <table class="table table-striped table-condensed table-hover">
+  <table class="table table-odd table-hover">
     <thead>
       <tr>
-        <th class="">Recebido em<a ng-click="sort_by('createdDate')"><i class="icon-sort marg-l-5"></i></a></th>
-        <th class="">Ocorrio em<a ng-click="sort_by('ocurrenceDate')"><i class="icon-sort marg-l-5"></i></a></th>
-        <th class="">Descrição<a ng-click="sort_by('description')"><i class="icon-sort marg-l-5"></i></a></th>
-        <th class="">Sistema de Origem<a ng-click="sort_by('system')"><i class="icon-sort marg-l-5"></i></a></th>
-        <th class="">Visualizado<a ng-click="sort_by('assigned')"><i class="icon-sort marg-l-5"></i></a></th>
+        <th>Recebido em<a ng-click="sortBy('createdDate')"><i class="fa fa-sort marg-l-5"></i></a></th>
+        <th>Ocorrio em<a ng-click="sortBy('ocurrenceDate')"><i class="fa fa-sort marg-l-5"></i></a></th>
+        <th>Descrição<a ng-click="sortBy('description')"><i class="fa fa-sort marg-l-5"></i></a></th>
+        <th>Sistema de Origem<a ng-click="sortBy('system')"><i class="fa fa-sort marg-l-5"></i></a></th>
+        <th>Visualizado<a ng-click="sortBy('assigned')"><i class="fa fa-sort marg-l-5"></i></a></th>
       </tr>
     </thead>
     <tfoot>
-      <td colspan="6">
-        <div class="pagination pull-right">
-          <ul>
-            <li ng-class="{disabled: currentPage == 0}">
-              <a href ng-click="prevPage()">« Prev</a>
-            </li>
-            <li ng-repeat="n in range(pagedItems.length)" ng-class="{active: n == currentPage}" ng-click="setPage()">
-              <a href ng-bind="n + 1">1</a>
-            </li>
-            <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
-              <a href ng-click="nextPage()">Next »</a>
-            </li>
-          </ul>
-        </div>
-      </td>
+      <tr class="no-hover">
+        <td colspan="6">
+          <div class="pagination pull-right">
+            <span>Linhas por pg.</span>
+            <select class="form-input marg-t-14 marg-b-14" ng-model="itemsPerPage" ng-change="perPage()" ng-options="(size) for size in pageSizes"></select>
+            <ul class="pull-right">
+              <li ng-class="{disabled: currentPage == 0}">
+                <a href ng-click="prevPage()">« Ant</a>
+              </li>
+              <li ng-repeat="n in range(pagedItems.length)" ng-class="{active: n == currentPage}" ng-click="setPage()">
+                <a href ng-bind="n + 1">1</a>
+              </li>
+              <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                <a href ng-click="nextPage()">Próx »</a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
     </tfoot>
     <tbody>
       <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse">
@@ -33,7 +37,14 @@
         <td>{{item.ocurrenceDate | date:"dd/MM/yyyy 'at' h:mma"}}</td>
         <td>{{item.description}}</td>
         <td>{{item.system}}</td>
-        <td><input type="checkbox" checklist-value="item.assigned"></td>
+        <td>
+          <span ng-if="item.assigned">
+            <i class="fa fa-eye" aria-hidden="true" title="Visualizado"></i>
+          </span>
+          <span ng-if="!item.assigned">
+              <i class="fa fa-eye-slash" aria-hidden="true" title="Não visualizado"></i>
+            </span>
+        </td>
       </tr>
     </tbody>
   </table>
